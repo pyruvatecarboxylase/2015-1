@@ -1,8 +1,27 @@
 # -*- coding: cp949 -*-
+
+from sequences import sequences
+
+
+sequence1 = raw_input("input your sequence1:")
+sequence2 = raw_input("input your sequence2:")
+
+sequenceset=sequences(sequence1,sequence2)
+
+sequenceset.setsequence1(sequence1)
+sequenceset.setsequence2(sequence2)
+
+s1 = sequenceset.getsequence1()
+s2 =  sequenceset.getsequence2()
+
+#class없을때  test할 때 쓰는 부분
+'''
 s1='GCTGATATAGCT'
 s2='GGGTGATTAGCT'
 s1="-"+s1
 s2="-"+s2
+'''
+
 
 # 각 좌표의 distance로 구성된 distance table 만들기
 distance_table=[]
