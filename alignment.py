@@ -4,16 +4,15 @@ from sequences import sequences
 import re
 from operator import itemgetter
 
-
-
+'''
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
 '''
-sequence1='cgatcgtacgcttctcgcgctcgtcgtatatcatactagctcgacgacgagctagcta'
-sequence2='cgatcgatcatctgagcatcgatcgtagctagctagctagctagctagctagctagcta'
-'''
-sequence1.upper()
-sequence2.upper()
+sequence1='gaattcgCGATCGTACGAGCGCGCGATTATCTACTTCTCGCGGCGCGCGAGTATATCTATCACcgacgagcgagaattc'
+sequence2='gaaGCTAGCTAGCTAGCTAttcatcgGCACGATCGATCGTAGCTAGCTgaattc'
+
+sequence1=sequence1.upper()
+sequence2=sequence2.upper()
 
 sequenceset = sequences(sequence1,sequence2)
 
@@ -22,7 +21,6 @@ sequenceset.setsequence2(sequence2)
 
 s1 = sequenceset.getsequence1()
 s2 =  sequenceset.getsequence2()
-
 
 deletion_number=float(raw_input("Enter deletion add:"))
 substitution_number=float(raw_input("Enter subtitution add:"))
@@ -148,10 +146,17 @@ for path in path_list:
     one = "".join(align_one)
     two = "".join(align_two)
     score=distance_table[len(s1)-1][len(s2)-1]
-    if '--' in one[1:]:#연속으로 deletion되었을 경우에 score추가.(-a- 같은 것들에 패널티)
-        score= score+2
-    if '--' in two[1:]:
-        score= score+2
+
+    #1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
+    if '-A-' in two[1:]:
+        score= score-deletion_number
+    if '-T-' in two[1:]:
+        score= score-deletion_number
+    if '-G-' in two[1:]:
+        score= score-deletion_number
+    if '-C-' in two[1:]:
+        score= score-deletion_number
+
     whole_align.append(score)
     whole_align.append(one[1:])
     whole_align.append(two[1:])
