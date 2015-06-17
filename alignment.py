@@ -78,8 +78,7 @@ def direction(a, b):
                 direction.append('down')
         else:
             if distance(a,b)== distance_table[a-1][b-1]+substitution_number:
-                direction.append('down')
-                direction.append('right')
+                direction.append('cross')
             if distance(a,b)== distance_table[a][b-1]+right_number:
                 direction.append('right')
             if distance(a,b)== distance_table[a-1][b]+down_number:
@@ -100,6 +99,8 @@ def finding_path(a ,b):
     if direction == '-':
         path.reverse()
         return path
+    if direction == 'cross':
+        return finding_path(a-1, b-1)
     if direction == 'cross':
         return finding_path(a-1, b-1)
     elif direction =='right':
@@ -137,7 +138,6 @@ for path in path_list:
             n = n+1
             align_two.append('-')
             k = k+1
-            score = score+substitution_number
         elif letter == 'cross':
             align_one.append(s1[n])
             n = n+1
@@ -147,17 +147,15 @@ for path in path_list:
             align_one.append('-')
             align_two.append(s2[k])
             k = k+1
-            score = score+deletion_number
         elif letter == 'down':
             align_one.append(s1[n])
             n = n+1
             align_two.append('-')
-            score = score+deletion_number
     one = "".join(align_one)
     two = "".join(align_two)
     print 'align', p
     p = p+1
     print one[1:]
     print two[1:]
-    print 'score', ':', score
+    print 'score', ':', distance_table[len(s1)-1][len(s2)-1]
     print ""
