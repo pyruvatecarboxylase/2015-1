@@ -16,15 +16,15 @@ s2 =  sequenceset.getsequence2()
 
 #class없을때  test할 때 쓰는 부분
 '''
-s1 = 'GCTGATATAGCT'
-s2 = 'GGGTGATTAGCT'
+s1 = 'AAAAAAAAAAAA'
+s2 = 'AAAAATAAAAAA'
 s1 = "-"+ s1
 s2 = "-"+ s2
 
-deletion_number=0.2
+deletion_number=0.5
 right_number = deletion_number
 down_number = deletion_number
-substitution_number=0.5
+substitution_number=0.2
 
 
 # 각 좌표의 distance로 구성된 distance table 만들기
@@ -123,7 +123,7 @@ for path in path_list:
             n = n+1
             align_two.append('-')
             k = k+1
-            score = score+1
+            score = score+substitution_number
         elif letter == 'cross':
             align_one.append(s1[n])
             n = n+1
@@ -133,12 +133,12 @@ for path in path_list:
             align_one.append('-')
             align_two.append(s2[k])
             k = k+1
-            score = score+1
+            score = score+deletion_number
         elif letter == 'down':
             align_one.append(s1[n])
             n = n+1
             align_two.append('-')
-            score = score+1
+            score = score+deletion_number
     one = "".join(align_one)
     two = "".join(align_two)
     print 'align', p
