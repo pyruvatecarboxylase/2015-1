@@ -1,11 +1,19 @@
 # -*- coding: cp949 -*-
 
 from sequences import sequences
+import re
+from operator import itemgetter
 
-'''
+
+
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
-
+'''
+sequence1='cgatcgtacgcttctcgcgctcgtcgtatatcatactagctcgacgacgagctagcta'
+sequence2='cgatcgatcatctgagcatcgatcgtagctagctagctagctagctagctagctagcta'
+'''
+sequence1.upper()
+sequence2.upper()
 
 sequenceset = sequences(sequence1,sequence2)
 
@@ -15,24 +23,8 @@ sequenceset.setsequence2(sequence2)
 s1 = sequenceset.getsequence1()
 s2 =  sequenceset.getsequence2()
 
-#class없을때  test할 때 쓰는 부분
-'''
-
-s1 = 'CGATCGATCGATCATCTCTTCAGCA'
-s2 = 'GCACACATCATCGATC'
-s1 = "-"+ s1
-s2 = "-"+ s2
-
-'''
-deletion_number=0.2
-substitution_number=0.3
-right_number = deletion_number
-down_number = deletion_number
-'''
 
 deletion_number=float(raw_input("Enter deletion add:"))
-right_number = deletion_number
-down_number = deletion_number
 substitution_number=float(raw_input("Enter subtitution add:"))
 
 
@@ -46,17 +38,14 @@ def distance(a, b):
     elif a == 0.0 and b != 0.0:
         return b * deletion_number
     elif s1[a] == s2[b]:
-        return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
+        return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+deletion_number,distance_table[a][b-1]+deletion_number))
     else:
-        return float(min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
+        return float(min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+deletion_number,distance_table[a][b-1]+deletion_number))
 
 for a in range(len(s1)):
     distance_table.append([])
     for b in range(len(s2)):
         distance_table[a].append(round(float((distance(a, b))),4))
-
-for a in distance_table:
-    print a
 
 #각 distance가 유래 해 온 direction으로 구성된 direction table 만들기
 direction_table=[]
@@ -72,24 +61,24 @@ def direction(a, b):
         if s1[a] == s2[b]:
             if distance(a,b) == distance_table[a-1][b-1]:
                 direction.append('cross')
-            if distance(a,b) == distance_table[a][b-1]+right_number:
+            if distance(a,b) == distance_table[a][b-1]+deletion_number:
                 direction.append('right')
-            if distance(a,b) == distance_table[a-1][b]+down_number:
+            if distance(a,b) == distance_table[a-1][b]+deletion_number:
                 direction.append('down')
         else:
             if distance(a,b)== distance_table[a-1][b-1]+substitution_number:
-                direction.append('cross')
-            if distance(a,b)== distance_table[a][b-1]+right_number:
+                direction.append('dif_cross')
+            if distance(a,b)== distance_table[a][b-1]+deletion_number:
                 direction.append('right')
-            if distance(a,b)== distance_table[a-1][b]+down_number:
+            if distance(a,b)== distance_table[a-1][b]+deletion_number:
                direction.append('down')
         return direction
+
 for a in range(len(s1)):
     direction_table.append([])
     for b in range(len(s2)):
         direction_table[a].append(direction(a, b))
-for a in direction_table:
-    print a
+
 #첫 좌표에서 마지막 좌표로 가는 direction들을 연결한 path 구하는 함수 만들기
 def finding_path(a ,b):
     direction = direction_table[a][b][0]
@@ -101,7 +90,7 @@ def finding_path(a ,b):
         return path
     if direction == 'cross':
         return finding_path(a-1, b-1)
-    if direction == 'cross':
+    if direction == 'dif_cross':
         return finding_path(a-1, b-1)
     elif direction =='right':
         return finding_path(a, b-1)
@@ -124,9 +113,9 @@ while 1:
 
 #각 path를 이용해 align하기 + path score 계산하기
 p = 1
-for a in path_list:
-    print a
+alignment={}
 for path in path_list:
+    whole_align=[]
     align_one = []
     align_two = []
     n = 0
@@ -143,6 +132,11 @@ for path in path_list:
             n = n+1
             align_two.append(s2[k])
             k = k+1
+        elif letter == 'dif_cross':
+            align_one.append(s1[n])
+            n = n+1
+            align_two.append(s2[k])
+            k = k+1
         elif letter == 'right':
             align_one.append('-')
             align_two.append(s2[k])
@@ -153,9 +147,35 @@ for path in path_list:
             align_two.append('-')
     one = "".join(align_one)
     two = "".join(align_two)
-    print 'align', p
-    p = p+1
-    print one[1:]
-    print two[1:]
-    print 'score', ':', distance_table[len(s1)-1][len(s2)-1]
-    print ""
+    score=distance_table[len(s1)-1][len(s2)-1]
+    if '--' in one[1:]:#연속으로 deletion되었을 경우에 score추가.(-a- 같은 것들에 패널티)
+        score= score+2
+    if '--' in two[1:]:
+        score= score+2
+    whole_align.append(score)
+    whole_align.append(one[1:])
+    whole_align.append(two[1:])
+    alignment[p]=whole_align
+    p=p+1
+
+
+#가장 높은 score 찾기
+scores=[]
+for i in range(1,p):
+    scores.append(alignment[i][0])
+highest_score=max(scores)
+
+#score가 낮으면 해당 align을 삭제
+for i in range(1,p):
+    if alignment[i][0] != highest_score:
+        del alignment[i]
+
+
+
+
+for a in alignment:
+    print ''
+    print 'align', ':', a
+    print alignment[a][1]
+    print alignment[a][2]
+    print 'score: ',alignment[a][0]
