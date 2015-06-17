@@ -2,7 +2,7 @@
 
 from sequences import sequences
 
-
+'''
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
 
@@ -17,15 +17,23 @@ s2 =  sequenceset.getsequence2()
 
 #class없을때  test할 때 쓰는 부분
 '''
-s1 = 'AAAAAAAAAAAA'
-s2 = 'AAAAATAAAAAA'
+
+s1 = 'ATCGATCGATGCTAGCTA'
+s2 = 'CGAGCTACGATCGATCTG'
 s1 = "-"+ s1
 s2 = "-"+ s2
+
 '''
-deletion_number=raw_input("Enter deletion add:")
+deletion_number=0.2
+substitution_number=0.3
 right_number = deletion_number
 down_number = deletion_number
-substitution_number=raw_input("Enter subtitution add:")
+'''
+
+deletion_number=float(raw_input("Enter deletion add:"))
+right_number = deletion_number
+down_number = deletion_number
+substitution_number=float(raw_input("Enter subtitution add:"))
 
 
 # 각 좌표의 distance로 구성된 distance table 만들기
@@ -38,16 +46,19 @@ def distance(a, b):
     elif a == 0.0 and b != 0.0:
         return b * deletion_number
     elif s1[a] == s2[b]:
-        return min(distance_table[a-1][b-1],distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number)
+        return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
+
     else:
-        return min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number)
+        return float(min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
 
 for a in range(len(s1)):
     distance_table.append([])
     for b in range(len(s2)):
-        distance_table[a].append(round(distance(a, b),4))
+        distance_table[a].append(round(float((distance(a, b))),4))
+
 for a in distance_table:
     print a
+
 #각 distance가 유래 해 온 direction으로 구성된 direction table 만들기
 direction_table=[]
 def direction(a, b):
