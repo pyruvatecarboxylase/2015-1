@@ -18,8 +18,8 @@ s2 =  sequenceset.getsequence2()
 #class없을때  test할 때 쓰는 부분
 '''
 
-s1 = 'ATCGATCGATGCTAGCTA'
-s2 = 'CGAGCTACGATCGATCTG'
+s1 = 'CGATCGATCGATCATCTCTTCAGCA'
+s2 = 'GCACACATCATCGATC'
 s1 = "-"+ s1
 s2 = "-"+ s2
 
@@ -47,7 +47,6 @@ def distance(a, b):
         return b * deletion_number
     elif s1[a] == s2[b]:
         return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
-
     else:
         return float(min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+down_number,distance_table[a][b-1]+right_number))
 
@@ -79,7 +78,8 @@ def direction(a, b):
                 direction.append('down')
         else:
             if distance(a,b)== distance_table[a-1][b-1]+substitution_number:
-                direction.append('cross')
+                direction.append('down')
+                direction.append('right')
             if distance(a,b)== distance_table[a][b-1]+right_number:
                 direction.append('right')
             if distance(a,b)== distance_table[a-1][b]+down_number:
@@ -123,6 +123,8 @@ while 1:
 
 #각 path를 이용해 align하기 + path score 계산하기
 p = 1
+for a in path_list:
+    print a
 for path in path_list:
     align_one = []
     align_two = []
