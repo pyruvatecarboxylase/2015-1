@@ -1,10 +1,11 @@
 # -*- coding: cp949 -*-
-'''
+
 from sequences import sequences
 
 
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
+
 
 sequenceset = sequences(sequence1,sequence2)
 
@@ -20,11 +21,11 @@ s1 = 'AAAAAAAAAAAA'
 s2 = 'AAAAATAAAAAA'
 s1 = "-"+ s1
 s2 = "-"+ s2
-
-deletion_number=0.5
+'''
+deletion_number=raw_input("Enter deletion add:")
 right_number = deletion_number
 down_number = deletion_number
-substitution_number=0.2
+substitution_number=raw_input("Enter subtitution add:")
 
 
 # 각 좌표의 distance로 구성된 distance table 만들기
