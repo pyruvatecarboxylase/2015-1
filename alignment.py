@@ -4,7 +4,6 @@ from sequences import sequences
 import re
 from operator import itemgetter
 
-
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
 deletion_number=float(raw_input("Enter deletion add:"))
@@ -16,12 +15,10 @@ sequence2=sequence2.upper()
 
 sequenceset = sequences(sequence1,sequence2,substitution_number,deletion_number)
 
-
 sequenceset.setsequence1(sequence1)
 sequenceset.setsequence2(sequence2)
 sequenceset.setsubstitution_number(substitution_number)
 sequenceset.setdeletion_number(deletion_number)
-
 
 s1 = sequenceset.getsequence1()
 s2 =  sequenceset.getsequence2()
@@ -50,6 +47,7 @@ for a in range(len(s1)):
     for b in range(len(s2)):
         distance_table[a].append(round(float((distance(a, b))),4))
 
+
 #각 distance가 유래 해 온 direction으로 구성된 direction table 만들기
 direction_table=[]
 def direction(a, b):
@@ -70,7 +68,7 @@ def direction(a, b):
                 direction.append('down')
         else:
             if distance(a,b)== distance_table[a-1][b-1]+substitution_number:
-                direction.append('dif_cross')
+                direction.append('cross')
             if distance(a,b)== distance_table[a][b-1]+deletion_number:
                 direction.append('right')
             if distance(a,b)== distance_table[a-1][b]+deletion_number:
@@ -81,8 +79,10 @@ for a in range(len(s1)):
     direction_table.append([])
     for b in range(len(s2)):
         direction_table[a].append(direction(a, b))
+edit_distance=distance_table[len(s1)-1][len(s2)-1]
 
 #첫 좌표에서 마지막 좌표로 가는 direction들을 연결한 path 구하는 함수 만들기
+#여러개의 path가 생기는 좌표인 branch를 찾기
 def finding_path(a ,b):
     direction = direction_table[a][b][0]
     path.append(direction)
@@ -92,8 +92,6 @@ def finding_path(a ,b):
         path.reverse()
         return path
     if direction == 'cross':
-        return finding_path(a-1, b-1)
-    if direction == 'dif_cross':
         return finding_path(a-1, b-1)
     elif direction =='right':
         return finding_path(a, b-1)
@@ -114,44 +112,44 @@ while 1:
     last_branch = branch_list[0]
     del direction_table[last_branch[0]][last_branch[1]][0]
 
-#각 path를 이용해 align하기 + path score 계산하기
-p = 1
-alignment={}
+
+#각 path를 이용해 align하기 
+align_count = 0
+align_list=[]
 for path in path_list:
-    whole_align=[]
-    align_one = []
-    align_two = []
+    align_1 = []
+    align_2 = []
     n = 0
     k = 0
-    score = 0
+    p=1
+    align_count=align_count+1
     for letter in path:
         if letter == '-':
-            align_one.append('-')
+            align_1.append('-')
             n = n+1
-            align_two.append('-')
+            align_2.append('-')
             k = k+1
         elif letter == 'cross':
-            align_one.append(s1[n])
+            align_1.append(s1[n])
             n = n+1
-            align_two.append(s2[k])
-            k = k+1
-        elif letter == 'dif_cross':
-            align_one.append(s1[n])
-            n = n+1
-            align_two.append(s2[k])
+            align_2.append(s2[k])
             k = k+1
         elif letter == 'right':
-            align_one.append('-')
-            align_two.append(s2[k])
+            align_1.append('-')
+            align_2.append(s2[k])
             k = k+1
         elif letter == 'down':
-            align_one.append(s1[n])
+            align_1.append(s1[n])
             n = n+1
-            align_two.append('-')
-    one = "".join(align_one)
-    two = "".join(align_two)
-    score=distance_table[len(s1)-1][len(s2)-1]
+            align_2.append('-')
+    align_list.append([align_count,"".join(align_1),"".join(align_2)])
 
+print align_list
+print 'edit distance : ', edit_distance
+"""
+def segment_count(a,b):
+   """ 
+"""
 
 #1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
     if '-A-' in two[1:]:
@@ -190,3 +188,4 @@ for a in alignment:
     print alignment[a][1]
     print alignment[a][2]
     print 'score: ',alignment[a][0]
+"""
