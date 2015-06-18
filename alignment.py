@@ -4,26 +4,31 @@ from sequences import sequences
 import re
 from operator import itemgetter
 
-'''
+
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
-'''
-sequence1='gaattcgCGATCGTACGAGCGCGCGATTATCTACTTCTCGCGGCGCGCGAGTATATCTATCACcgacgagcgagaattc'
-sequence2='gaaGCTAGCTAGCTAGCTAttcatcgGCACGATCGATCGTAGCTAGCTgaattc'
+deletion_number=float(raw_input("Enter deletion add:"))
+substitution_number=float(raw_input("Enter subtitution add:"))
 
+#받은 sequence를 대문자로.
 sequence1=sequence1.upper()
 sequence2=sequence2.upper()
 
-sequenceset = sequences(sequence1,sequence2)
+sequenceset = sequences(sequence1,sequence2,substitution_number,deletion_number)
+
 
 sequenceset.setsequence1(sequence1)
 sequenceset.setsequence2(sequence2)
+sequenceset.setsubstitution_number(substitution_number)
+sequenceset.setdeletion_number(deletion_number)
+
 
 s1 = sequenceset.getsequence1()
 s2 =  sequenceset.getsequence2()
+substitution_number = sequenceset.getsubstitution_number()
+deletion_number =  sequenceset.getdeletion_number()
 
-deletion_number=float(raw_input("Enter deletion add:"))
-substitution_number=float(raw_input("Enter subtitution add:"))
+
 
 
 # 각 좌표의 distance로 구성된 distance table 만들기
@@ -147,15 +152,16 @@ for path in path_list:
     two = "".join(align_two)
     score=distance_table[len(s1)-1][len(s2)-1]
 
-    #1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
+
+#1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
     if '-A-' in two[1:]:
-        score= score-deletion_number
+        score= score+deletion_number
     if '-T-' in two[1:]:
-        score= score-deletion_number
+        score= score+deletion_number
     if '-G-' in two[1:]:
-        score= score-deletion_number
+        score= score+deletion_number
     if '-C-' in two[1:]:
-        score= score-deletion_number
+        score= score+deletion_number
 
     whole_align.append(score)
     whole_align.append(one[1:])
@@ -163,16 +169,16 @@ for path in path_list:
     alignment[p]=whole_align
     p=p+1
 
-
+print alignment
 #가장 높은 score 찾기
 scores=[]
 for i in range(1,p):
     scores.append(alignment[i][0])
-highest_score=max(scores)
+lowest_score=min(scores)
 
 #score가 낮으면 해당 align을 삭제
 for i in range(1,p):
-    if alignment[i][0] != highest_score:
+    if alignment[i][0] != lowest_score:
         del alignment[i]
 
 
