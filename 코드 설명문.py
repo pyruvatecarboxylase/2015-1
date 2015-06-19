@@ -7,7 +7,6 @@ addition/deletion이 일어날 때 distance로 더해줄 값(add_del_constant)과
 substitution이 일어날 때 더해줄 값(substitution constant:)를 입력받는다.
 
 
-
 2. distance table 만들기
 2.1 distance table속 좌표값(distance)를 구하는 함수인 distance(a,b) 만들기
 2.1.1 a와 b는 distance table의 좌표를 의미한다.(왼쪽 위에서 시작, a는 세로축, b는 가로축)
