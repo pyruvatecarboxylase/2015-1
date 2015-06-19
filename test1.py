@@ -3,11 +3,16 @@
 from sequences import sequences
 from operator import itemgetter
 from types import *
-
+'''
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
 add_del_constant=float(raw_input("Enter addition and deletion constant:(default:1)"))
 substitution_constant=float(raw_input("Enter subtitution constant:(default:1)"))
+'''
+sequence1 = 'cgagcgcagcgactacgtcgaattcgcgtatcgatcttagccgtcgatcgatcgatgaattc'
+sequence2 = 'gacgaagcagaattcgacgagcgtagcgtagctagcttttttaagctagctagaattcgacgtatgctagc'
+add_del_constant= 0.3
+substitution_constant = 0.7
 
 #받은 sequence를 대문자로.
 sequence1=sequence1.upper()
@@ -94,7 +99,7 @@ def finding_path(a ,b):
         return finding_path(a, b-1)
     elif direction == 'down':
         return finding_path(a-1, b)
-    
+
 #모든 가능한 path들의 list 만들기
 path_list = []
 while 1:
@@ -110,7 +115,7 @@ while 1:
     del direction_table[last_branch[0]][last_branch[1]][0]
 
 
-#각 path를 이용해 align하기 
+#각 path를 이용해 align하기
 align_count = 0
 align_list=[]
 for path in path_list:
@@ -156,47 +161,3 @@ for align in align_list:
             print letter
     print 'edit distance : ', edit_distance
 
-"""
-#1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
-    if '-A-' in align_1[1:] or align_2:
-        edit_distance= edit_distance+add_del_constant
-    if '-T-' in align_1[1:]:
-        edit_distance= edit_distance+add_del_constant
-    if '-G-' in align_1[1:]:
-        edit_distance= edit_distance+add_del_constant
-    if '-C-' in align_1[1:]:
-        edit_distance= edit_distance+add_del_constant
-    whole_align=[]
-    whole_align.append(edit_distance)
-    whole_align.append(align_1[1:])
-    whole_align.append(align_2[1:])
-    alignment[p]=whole_align
-    p=p+1
-
-#가장 높은 score 찾기
-scores=[]
-for i in range(1,p):
-    scores.append(alignment[i][0])
-lowest_score=min(scores)
-
-
-print "Your input sequence1 is :" ,sequence1
-print "Your input sequence2 is :" ,sequence2
-print "Your addition/deletion constant is:" ,add_del_constant
-print "Your substitution constant is:" ,substitution_constant
-
-
-#score가 낮으면 해당 align을 삭제
-for i in range(1,p):
-    if alignment[i][0] != lowest_score:
-        del alignment[i]
-
-
-
-
-for a in alignment:
-    print ''
-    print 'Alignment', ':', a
-    print "".join(alignment[a][1])
-    print "".join(alignment[a][2])
-    print 'score: ',alignment[a][0]"""
