@@ -26,7 +26,6 @@ add_del_constant =  sequenceset.getadd_del_constant()
 
 
 
-
 # 각 좌표의 distance로 구성된 distance table 만들기
 distance_table = []
 def distance(a, b):

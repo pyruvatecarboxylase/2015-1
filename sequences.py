@@ -1,5 +1,4 @@
 class sequences(object):
-
     def __init__(self,s1=None,s2=None,substitution_constant=None,add_del_constant=None):
         self.setsequence1(s1)
         self.setsequence2(s2)
