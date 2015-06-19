@@ -5,8 +5,8 @@ from operator import itemgetter
 
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
-add_del_constant=float(raw_input("Enter deletion add:"))
-substitution_constant=float(raw_input("Enter subtitution add:"))
+add_del_constant=float(raw_input("Enter addition and deletion constant:"))
+substitution_constant=float(raw_input("Enter subtitution constant:"))
 
 #받은 sequence를 대문자로.
 sequence1=sequence1.upper()
