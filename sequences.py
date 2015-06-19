@@ -1,10 +1,10 @@
 class sequences(object):
 
-    def __init__(self,s1=None,s2=None,substitution_number=None,deletion_number=None):
+    def __init__(self,s1=None,s2=None,substitution_constant=None,add_del_constant=None):
         self.setsequence1(s1)
         self.setsequence2(s2)
-        self.setsubstitution_number(substitution_number)
-        self.setdeletion_number(deletion_number)
+        self.setsubstitution_constant(substitution_constant)
+        self.setadd_del_constant(add_del_constant)
 
     def setsequence1(self, sequence):
         self.__sequence1 = '-' + sequence
@@ -18,15 +18,15 @@ class sequences(object):
     def getsequence2(self):
         return self.__sequence2
 
-    def setsubstitution_number(self, substitution_number):
-        self.__substitution_number = substitution_number
+    def setsubstitution_constant(self, substitution_constant):
+        self.__substitution_constant = substitution_constant
 
-    def setdeletion_number(self, deletion_number):
-        self.__deletion_number = deletion_number
+    def setadd_del_constant(self, add_del_constant):
+        self.__add_del_constant = add_del_constant
 
-    def getsubstitution_number(self):
-        return self.__substitution_number
+    def getsubstitution_constant(self):
+        return self.__substitution_constant
 
-    def getdeletion_number(self):
-        return self.__deletion_number
+    def getadd_del_constant(self):
+        return self.__add_del_constant
 

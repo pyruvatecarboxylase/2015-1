@@ -1,29 +1,28 @@
 # -*- coding: cp949 -*-
 
 from sequences import sequences
-import re
 from operator import itemgetter
 
 sequence1 = raw_input("input your sequence1:")
 sequence2 = raw_input("input your sequence2:")
-deletion_number=float(raw_input("Enter deletion add:"))
-substitution_number=float(raw_input("Enter subtitution add:"))
+add_del_constant=float(raw_input("Enter deletion add:"))
+substitution_constant=float(raw_input("Enter subtitution add:"))
 
 #받은 sequence를 대문자로.
 sequence1=sequence1.upper()
 sequence2=sequence2.upper()
 
-sequenceset = sequences(sequence1,sequence2,substitution_number,deletion_number)
+sequenceset = sequences(sequence1,sequence2,substitution_constant,add_del_constant)
 
 sequenceset.setsequence1(sequence1)
 sequenceset.setsequence2(sequence2)
-sequenceset.setsubstitution_number(substitution_number)
-sequenceset.setdeletion_number(deletion_number)
+sequenceset.setsubstitution_constant(substitution_constant)
+sequenceset.setadd_del_constant(add_del_constant)
 
 s1 = sequenceset.getsequence1()
 s2 =  sequenceset.getsequence2()
-substitution_number = sequenceset.getsubstitution_number()
-deletion_number =  sequenceset.getdeletion_number()
+substitution_constant = sequenceset.getsubstitution_constant()
+add_del_constant =  sequenceset.getadd_del_constant()
 
 
 
@@ -34,13 +33,13 @@ def distance(a, b):
     if a == 0.0 and b == 0.0:
         return 0.0
     elif a != 0.0 and b == 0.0:
-        return a * deletion_number
+        return a * add_del_constant
     elif a == 0.0 and b != 0.0:
-        return b * deletion_number
+        return b * add_del_constant
     elif s1[a] == s2[b]:
-        return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+deletion_number,distance_table[a][b-1]+deletion_number))
+        return float(min(distance_table[a-1][b-1],distance_table[a-1][b]+add_del_constant,distance_table[a][b-1]+add_del_constant))
     else:
-        return float(min(distance_table[a-1][b-1]+substitution_number,distance_table[a-1][b]+deletion_number,distance_table[a][b-1]+deletion_number))
+        return float(min(distance_table[a-1][b-1]+substitution_constant,distance_table[a-1][b]+add_del_constant,distance_table[a][b-1]+add_del_constant))
 
 for a in range(len(s1)):
     distance_table.append([])
@@ -62,16 +61,16 @@ def direction(a, b):
         if s1[a] == s2[b]:
             if distance(a,b) == distance_table[a-1][b-1]:
                 direction.append('cross')
-            if distance(a,b) == distance_table[a][b-1]+deletion_number:
+            if distance(a,b) == distance_table[a][b-1]+add_del_constant:
                 direction.append('right')
-            if distance(a,b) == distance_table[a-1][b]+deletion_number:
+            if distance(a,b) == distance_table[a-1][b]+add_del_constant:
                 direction.append('down')
         else:
-            if distance(a,b)== distance_table[a-1][b-1]+substitution_number:
+            if distance(a,b)== distance_table[a-1][b-1]+substitution_constant:
                 direction.append('cross')
-            if distance(a,b)== distance_table[a][b-1]+deletion_number:
+            if distance(a,b)== distance_table[a][b-1]+add_del_constant:
                 direction.append('right')
-            if distance(a,b)== distance_table[a-1][b]+deletion_number:
+            if distance(a,b)== distance_table[a-1][b]+add_del_constant:
                direction.append('down')
         return direction
 
@@ -143,8 +142,11 @@ for path in path_list:
             n = n+1
             align_2.append('-')
     align_list.append([align_count,"".join(align_1),"".join(align_2)])
+# 최종 결과 도출
+for align in align_list:
+    for letter in align:
+        print letter
 
-print align_list
 print 'edit distance : ', edit_distance
 """
 def segment_count(a,b):
@@ -153,13 +155,13 @@ def segment_count(a,b):
 
 #1개 base사이로두고 띄엄띄엄 deletion되는 경우에 패널티
     if '-A-' in two[1:]:
-        score= score+deletion_number
+        score= score+add_del_constant
     if '-T-' in two[1:]:
-        score= score+deletion_number
+        score= score+add_del_constant
     if '-G-' in two[1:]:
-        score= score+deletion_number
+        score= score+add_del_constant
     if '-C-' in two[1:]:
-        score= score+deletion_number
+        score= score+add_del_constant
 
     whole_align.append(score)
     whole_align.append(one[1:])
